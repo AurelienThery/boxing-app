@@ -12,6 +12,8 @@ class BoxingApp {
         this.isResting = false;
         this.timer = null;
         this.soundEnabled = true;
+        this.audioContext = null;
+        this.MAX_HISTORY_SESSIONS = 50;
         
         this.init();
     }
@@ -206,13 +208,16 @@ class BoxingApp {
     playSound(type) {
         if (!this.soundEnabled) return;
 
-        // Create audio context for beeps
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
+        // Create audio context once and reuse it
+        if (!this.audioContext) {
+            this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+
+        const oscillator = this.audioContext.createOscillator();
+        const gainNode = this.audioContext.createGain();
 
         oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
+        gainNode.connect(this.audioContext.destination);
 
         oscillator.type = 'sine';
         gainNode.gain.value = 0.3;
@@ -221,31 +226,31 @@ class BoxingApp {
             case 'start':
                 oscillator.frequency.value = 880;
                 oscillator.start();
-                oscillator.stop(audioContext.currentTime + 0.1);
+                oscillator.stop(this.audioContext.currentTime + 0.1);
                 break;
             case 'rest':
                 oscillator.frequency.value = 440;
                 oscillator.start();
-                oscillator.stop(audioContext.currentTime + 0.3);
+                oscillator.stop(this.audioContext.currentTime + 0.3);
                 break;
             case 'warning':
                 oscillator.frequency.value = 660;
                 oscillator.start();
-                oscillator.stop(audioContext.currentTime + 0.1);
+                oscillator.stop(this.audioContext.currentTime + 0.1);
                 break;
             case 'complete':
                 // Play a sequence for completion
                 const frequencies = [523, 659, 784, 1047];
                 frequencies.forEach((freq, i) => {
                     setTimeout(() => {
-                        const osc = audioContext.createOscillator();
-                        const gain = audioContext.createGain();
+                        const osc = this.audioContext.createOscillator();
+                        const gain = this.audioContext.createGain();
                         osc.connect(gain);
-                        gain.connect(audioContext.destination);
+                        gain.connect(this.audioContext.destination);
                         osc.frequency.value = freq;
                         gain.gain.value = 0.3;
                         osc.start();
-                        osc.stop(audioContext.currentTime + 0.2);
+                        osc.stop(this.audioContext.currentTime + 0.2);
                     }, i * 150);
                 });
                 break;
@@ -264,8 +269,8 @@ class BoxingApp {
         
         history.unshift(session);
         
-        // Keep only last 50 sessions
-        if (history.length > 50) {
+        // Keep only last sessions as per MAX_HISTORY_SESSIONS
+        if (history.length > this.MAX_HISTORY_SESSIONS) {
             history.pop();
         }
         
