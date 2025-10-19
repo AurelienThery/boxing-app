@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boxing Training App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🥊 Boxing Training App</h1>
+            <p class="subtitle">Entraînements professionnels de boxe</p>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="timer">Minuteur</button>
+            <button class="tab-btn" data-tab="workouts">Entraînements</button>
+            <button class="tab-btn" data-tab="combos">Combinaisons</button>
+            <button class="tab-btn" data-tab="history">Historique</button>
+        </nav>
+
+        <!-- Timer Tab -->
+        <div class="tab-content active" id="timer">
+            <div class="timer-section">
+                <div class="timer-display">
+                    <div class="round-info">
+                        <span class="round-label">Round</span>
+                        <span class="round-number" id="currentRound">1</span>
+                        <span class="round-total">/ <span id="totalRounds">3</span></span>
+                    </div>
+                    <div class="time-display" id="timeDisplay">3:00</div>
+                    <div class="status-label" id="statusLabel">Prêt</div>
+                </div>
+
+                <div class="timer-controls">
+                    <button class="btn btn-primary" id="startBtn">Démarrer</button>
+                    <button class="btn btn-secondary" id="pauseBtn" disabled>Pause</button>
+                    <button class="btn btn-danger" id="resetBtn">Réinitialiser</button>
+                </div>
+
+                <div class="timer-settings">
+                    <h3>Paramètres</h3>
+                    <div class="settings-grid">
+                        <div class="setting-item">
+                            <label for="roundTime">Durée du round (min)</label>
+                            <input type="number" id="roundTime" min="1" max="12" value="3">
+                        </div>
+                        <div class="setting-item">
+                            <label for="restTime">Repos (sec)</label>
+                            <input type="number" id="restTime" min="10" max="120" value="60">
+                        </div>
+                        <div class="setting-item">
+                            <label for="numRounds">Nombre de rounds</label>
+                            <input type="number" id="numRounds" min="1" max="12" value="3">
+                        </div>
+                        <div class="setting-item">
+                            <label for="soundEnabled">Son activé</label>
+                            <input type="checkbox" id="soundEnabled" checked>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Workouts Tab -->
+        <div class="tab-content" id="workouts">
+            <h2>Programmes d'entraînement</h2>
+            <div class="workout-grid" id="workoutGrid">
+                <!-- Workouts will be dynamically inserted here -->
+            </div>
+        </div>
+
+        <!-- Combos Tab -->
+        <div class="tab-content" id="combos">
+            <h2>Bibliothèque de combinaisons</h2>
+            <div class="combos-list" id="combosList">
+                <!-- Combos will be dynamically inserted here -->
+            </div>
+        </div>
+
+        <!-- History Tab -->
+        <div class="tab-content" id="history">
+            <h2>Historique d'entraînement</h2>
+            <div class="history-controls">
+                <button class="btn btn-danger" id="clearHistory">Effacer l'historique</button>
+            </div>
+            <div class="history-list" id="historyList">
+                <!-- History will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
